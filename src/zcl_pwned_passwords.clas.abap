@@ -60,12 +60,12 @@ CLASS zcl_pwned_passwords IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD zif_pwned_passwords~is_pwned_password.
-    r_result = me->zif_pwned_passwords~query_password( i_password = i_password )-result.
+  METHOD zif_pwned_passwords~is_password_pwned.
+    r_result = me->zif_pwned_passwords~get_password_status( i_password = i_password )-result.
   ENDMETHOD.
 
 
-  METHOD zif_pwned_passwords~query_password.
+  METHOD zif_pwned_passwords~get_password_status.
     r_result = VALUE #( result = abap_false count = 0 ).
 
     CHECK i_password IS NOT INITIAL. " Blank is not pwned

@@ -7,7 +7,7 @@ INTERFACE zif_pwned_passwords
       count  TYPE i,
     END OF t_pwned_password_result.
 
-  METHODS is_pwned_password
+  METHODS is_password_pwned
     IMPORTING
       i_password      TYPE string
     RETURNING
@@ -15,7 +15,7 @@ INTERFACE zif_pwned_passwords
     RAISING
       zcx_pwned_passwords.
 
-  METHODS query_password
+  METHODS get_password_status
     IMPORTING
       i_password      TYPE string
     RETURNING
