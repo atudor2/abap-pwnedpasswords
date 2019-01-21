@@ -5,9 +5,11 @@ CLASS zcx_pwned_passwords DEFINITION
   CREATE PUBLIC .
 
   PUBLIC SECTION.
-
     INTERFACES if_t100_dyn_msg .
     INTERFACES if_t100_message .
+    DATA:
+       additional_message TYPE string READ-ONLY.
+
     CONSTANTS:
       BEGIN OF malformed_api_response,
         msgid TYPE symsgid VALUE 'ZPWNEDPASS_EXCEPTION',
@@ -16,8 +18,7 @@ CLASS zcx_pwned_passwords DEFINITION
         attr2 TYPE scx_attrname VALUE '',
         attr3 TYPE scx_attrname VALUE '',
         attr4 TYPE scx_attrname VALUE '',
-      END OF malformed_api_response .
-    CONSTANTS:
+      END OF malformed_api_response,
       BEGIN OF internal_error,
         msgid TYPE symsgid VALUE 'ZPWNEDPASS_EXCEPTION',
         msgno TYPE symsgno VALUE '002',
@@ -30,8 +31,9 @@ CLASS zcx_pwned_passwords DEFINITION
     "! <p class="shorttext synchronized" lang="en">CONSTRUCTOR</p>
     METHODS constructor
       IMPORTING
-        !textid   LIKE if_t100_message=>t100key OPTIONAL
-        !previous LIKE previous OPTIONAL .
+        textid             LIKE if_t100_message=>t100key OPTIONAL
+        previous           LIKE previous OPTIONAL
+        additional_message TYPE string OPTIONAL.
   PROTECTED SECTION.
   PRIVATE SECTION.
 ENDCLASS.
@@ -46,5 +48,7 @@ CLASS zcx_pwned_passwords IMPLEMENTATION.
     ELSE.
       if_t100_message~t100key = textid.
     ENDIF.
+
+    me->additional_message = additional_message.
   ENDMETHOD.
 ENDCLASS.

@@ -1,4 +1,4 @@
-"! <p class="shorttext synchronized" lang="en">Pwned Passwords API Call</p>
+"! <p class="shorttext synchronized" lang="en">Pwned Passwords API Wrapper</p>
 INTERFACE zif_pwned_passwords_api_call
   PUBLIC .
   TYPES:

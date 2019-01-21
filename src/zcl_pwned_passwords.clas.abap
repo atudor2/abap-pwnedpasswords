@@ -6,6 +6,7 @@ CLASS zcl_pwned_passwords DEFINITION
   PUBLIC SECTION.
     INTERFACES zif_pwned_passwords.
 
+    METHODS constructor.
   PROTECTED SECTION.
     "! <p class="shorttext synchronized" lang="en">Hashes the password in preparation for API call</p>
     "! @parameter i_password | <p class="shorttext synchronized" lang="en">Password</p>
@@ -21,28 +22,33 @@ CLASS zcl_pwned_passwords DEFINITION
     DATA api_wrapper TYPE REF TO zif_pwned_passwords_api_call.
 ENDCLASS.
 
+
+
 CLASS zcl_pwned_passwords IMPLEMENTATION.
+
+
+  METHOD constructor.
+    me->api_wrapper = NEW zcl_pwned_passwords_api_call( ).
+  ENDMETHOD.
+
+
   METHOD hash_password.
-    DATA raw_hash TYPE xstring.
+    DATA raw_password TYPE xstring.
 
     TRY.
         " Generate SHA1 hash of password
-        DATA(digest) = cl_abap_message_digest=>get_instance( 'sha1' ).
-
         DATA(converter) = cl_abap_conv_out_ce=>create( ).
-
         converter->convert(
              EXPORTING
                data   = i_password
              IMPORTING
-               buffer = raw_hash ).
+               buffer = raw_password ).
 
-        digest->update( if_data = raw_hash ).
-
+        DATA(digest) = cl_abap_message_digest=>get_instance( 'sha1' ).
+        digest->update( if_data = raw_password ).
         digest->digest( ).
 
         r_result = digest->to_string( ).
-
       CATCH cx_abap_message_digest cx_sy_codepage_converter_init
             cx_sy_conversion_codepage cx_parameter_invalid_type INTO DATA(ex).
 
@@ -53,16 +59,18 @@ CLASS zcl_pwned_passwords IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
+
   METHOD zif_pwned_passwords~is_pwned_password.
     r_result = me->zif_pwned_passwords~query_password( i_password = i_password )-result.
   ENDMETHOD.
+
 
   METHOD zif_pwned_passwords~query_password.
     r_result = VALUE #( result = abap_false count = 0 ).
 
     CHECK i_password IS NOT INITIAL. " Blank is not pwned
 
-    DATA(hash) = to_lower( me->hash_password( i_password = i_password ) ).
+    DATA(hash) = to_upper( me->hash_password( i_password = i_password ) ).
 
     " Pwned Passwords API wants the 1st 5 characters of the hash
     DATA(hash_prefix) = hash(5).
@@ -75,7 +83,8 @@ CLASS zcl_pwned_passwords IMPLEMENTATION.
 
     " Find the matching hash line -> : splits hash and password count
     LOOP AT hashes ASSIGNING FIELD-SYMBOL(<hash>).
-      CHECK strlen( <hash> ) >= 40 AND <hash>(40) = hash. " SHA1 => 40 chars
+      DATA(full_hash) = hash_prefix && <hash>(35). " SHA1 -> 40 chars
+      CHECK full_hash = hash.
 
       SPLIT <hash> AT ':' INTO TABLE DATA(hash_split).
 

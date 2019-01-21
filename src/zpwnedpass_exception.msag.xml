@@ -26,6 +26,12 @@
      <MSGNR>002</MSGNR>
      <TEXT>Internal Error</TEXT>
     </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZPWNEDPASS_EXCEPTION</ARBGB>
+     <MSGNR>003</MSGNR>
+     <TEXT>Internal HTTP Error: &amp;1 &amp;2 &amp;3 &amp;4</TEXT>
+    </T100>
    </T100>
   </asx:values>
  </asx:abap>
