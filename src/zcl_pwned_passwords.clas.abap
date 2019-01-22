@@ -6,6 +6,11 @@ CLASS zcl_pwned_passwords DEFINITION
   PUBLIC SECTION.
     INTERFACES zif_pwned_passwords.
 
+    "! <p class="shorttext synchronized" lang="en">Creates a new instance of the Pwned Password query</p>
+    "! @parameter r_result | <p class="shorttext synchronized" lang="en"></p>
+    CLASS-METHODS create
+      RETURNING VALUE(r_result) TYPE REF TO zif_pwned_passwords.
+
     METHODS constructor
       IMPORTING
         ir_api_call TYPE REF TO zif_pwned_passwords_api_call.
@@ -103,5 +108,9 @@ CLASS zcl_pwned_passwords IMPLEMENTATION.
       r_result = VALUE #( result = abap_true count = hash_split[ 2 ] ).
       RETURN.
     ENDLOOP.
+  ENDMETHOD.
+
+  METHOD create.
+    r_result = NEW zcl_pwned_passwords( NEW zcl_pwned_passwords_api_call( ) ).
   ENDMETHOD.
 ENDCLASS.
