@@ -6,7 +6,9 @@ CLASS zcl_pwned_passwords DEFINITION
   PUBLIC SECTION.
     INTERFACES zif_pwned_passwords.
 
-    METHODS constructor.
+    METHODS constructor
+      IMPORTING
+        ir_api_call TYPE REF TO zif_pwned_passwords_api_call.
   PROTECTED SECTION.
     "! <p class="shorttext synchronized" lang="en">Hashes the password in preparation for API call</p>
     "! @parameter i_password | <p class="shorttext synchronized" lang="en">Password</p>
@@ -25,12 +27,15 @@ ENDCLASS.
 
 
 CLASS zcl_pwned_passwords IMPLEMENTATION.
-
-
   METHOD constructor.
-    me->api_wrapper = NEW zcl_pwned_passwords_api_call( ).
-  ENDMETHOD.
+    IF ir_api_call IS NOT BOUND.
+      RAISE EXCEPTION TYPE cx_parameter_invalid
+        EXPORTING
+          parameter = 'IR_API_CALL'.
+    ENDIF.
 
+    me->api_wrapper = ir_api_call.
+  ENDMETHOD.
 
   METHOD hash_password.
     DATA raw_password TYPE xstring.
@@ -83,6 +88,7 @@ CLASS zcl_pwned_passwords IMPLEMENTATION.
 
     " Find the matching hash line -> : splits hash and password count
     LOOP AT hashes ASSIGNING FIELD-SYMBOL(<hash>).
+      CHECK strlen( <hash> ) >= 35.
       DATA(full_hash) = hash_prefix && <hash>(35). " SHA1 -> 40 chars
       CHECK full_hash = hash.
 

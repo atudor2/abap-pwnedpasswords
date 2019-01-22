@@ -29,9 +29,10 @@ CLASS zcl_pwned_passwords_api_call IMPLEMENTATION.
     CLEAR et_password_hashes[].
 
     IF strlen( i_hash_prefix ) <> 5.
-      RAISE EXCEPTION TYPE cx_abap_invalid_param_value
+      RAISE EXCEPTION TYPE cx_parameter_invalid_range
         EXPORTING
-          value = i_hash_prefix.
+          parameter = 'I_HASH_PREFIX'
+          value     = i_hash_prefix.
     ENDIF.
 
     " HTTP GET to 'https://api.pwnedpasswords.com/range/{5 char hash prefix}
