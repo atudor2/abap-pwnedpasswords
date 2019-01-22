@@ -8,6 +8,9 @@ CLASS zcl_pwned_passwords_api_call DEFINITION
     INTERFACES zif_pwned_passwords_api_call.
   PROTECTED SECTION.
   PRIVATE SECTION.
+    "! <p class="shorttext synchronized" lang="en">Rethrows the HTTP Client error message as an Exception</p>
+    "! @parameter i_client | <p class="shorttext synchronized" lang="en">HTTP Client with error response</p>
+    "! @raising zcx_pwned_passwords | <p class="shorttext synchronized" lang="en"></p>
     METHODS rethrow_http_client_error
       IMPORTING
         i_client TYPE REF TO if_http_client
