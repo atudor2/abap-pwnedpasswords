@@ -22,11 +22,19 @@ CLASS zcx_pwned_passwords DEFINITION
       BEGIN OF internal_error,
         msgid TYPE symsgid VALUE 'ZPWNEDPASS_EXCEPTION',
         msgno TYPE symsgno VALUE '002',
-        attr1 TYPE scx_attrname VALUE '',
+        attr1 TYPE scx_attrname VALUE 'ADDITIONAL_MESSAGE',
         attr2 TYPE scx_attrname VALUE '',
         attr3 TYPE scx_attrname VALUE '',
         attr4 TYPE scx_attrname VALUE '',
-      END OF internal_error .
+      END OF internal_error,
+      BEGIN OF network_error,
+        msgid TYPE symsgid VALUE 'ZPWNEDPASS_EXCEPTION',
+        msgno TYPE symsgno VALUE '003',
+        attr1 TYPE scx_attrname VALUE 'ADDITIONAL_MESSAGE',
+        attr2 TYPE scx_attrname VALUE '',
+        attr3 TYPE scx_attrname VALUE '',
+        attr4 TYPE scx_attrname VALUE '',
+      END OF network_error .
 
     "! <p class="shorttext synchronized" lang="en">CONSTRUCTOR</p>
     METHODS constructor

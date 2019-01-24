@@ -82,7 +82,7 @@ CLASS zcl_pwned_passwords_api_call IMPLEMENTATION.
 
     RAISE EXCEPTION TYPE zcx_pwned_passwords
       EXPORTING
-        textid             = zcx_pwned_passwords=>internal_error
+        textid             = zcx_pwned_passwords=>network_error
         additional_message = msg.
   ENDMETHOD.
 ENDCLASS.

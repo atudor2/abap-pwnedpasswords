@@ -80,7 +80,7 @@ CLASS zcl_pwned_passwords IMPLEMENTATION.
 
     CHECK i_password IS NOT INITIAL. " Blank is not pwned
 
-    DATA(hash) = to_upper( me->hash_password( i_password = i_password ) ).
+    DATA(hash) = to_upper( me->hash_password( i_password = CONV string( i_password ) ) ).
 
     " Pwned Passwords API wants the 1st 5 characters of the hash
     DATA(hash_prefix) = hash(5).

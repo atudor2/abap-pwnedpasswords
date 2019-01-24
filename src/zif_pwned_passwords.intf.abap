@@ -16,7 +16,7 @@ INTERFACE zif_pwned_passwords
   "! @raising zcx_pwned_passwords | <p class="shorttext synchronized" lang="en"></p>
   METHODS is_password_pwned
     IMPORTING
-      i_password      TYPE string
+      i_password      TYPE csequence
     RETURNING
       VALUE(r_result) TYPE abap_bool
     RAISING
@@ -28,7 +28,7 @@ INTERFACE zif_pwned_passwords
   "! @raising zcx_pwned_passwords | <p class="shorttext synchronized" lang="en"></p>
   METHODS get_password_status
     IMPORTING
-      i_password      TYPE string
+      i_password      TYPE csequence
     RETURNING
       VALUE(r_result) TYPE t_pwned_password_result
     RAISING
