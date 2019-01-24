@@ -6,6 +6,13 @@ Built and tested with ABAP 7.52 SP01, but should work with any releases >= 7.50
 ## Overview
 Simple ABAP wrapper for the [Pwned Passwords API V2](https://haveibeenpwned.com/api/v2#PwnedPasswords) REST API provided by Troy Hunt.
 
+## Setup SSL
+The SSL Certificates for https://api.pwnedpasswords.com/ must be added to STRUST before the API can be called. 
+
+The [abapGit SSL Setup Guide](https://docs.abapgit.org/guide-ssl-setup.html) provides the steps to do this. 
+
+Use the certificate from https://api.pwnedpasswords.com/ instead of [GitHub](https://github.com)
+
 ## Usage
 ```ABAP
   DATA(pwn_passwords) = zcl_pwned_passwords=>create( ).
