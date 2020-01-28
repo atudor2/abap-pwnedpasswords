@@ -1,6 +1,8 @@
 # abap-pwnedpasswords
 Pwned Passwords implementation for ABAP
 
+![abap package version](https://img.shields.io/endpoint?url=https://shield.abap.space/version-shield-json/github/atudor2/abap-pwnedpasswords/.apack-manifest.xml)
+
 Built and tested with ABAP 7.52 SP01, but should work with any releases >= 7.50
 
 ## Overview
