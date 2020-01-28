@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+ <asx:values>
+  <DATA>
+   <GROUP_ID>github.com/atudor2</GROUP_ID>
+   <ARTIFACT_ID>abap-pwnedpasswords</ARTIFACT_ID>
+   <VERSION>0.2</VERSION>
+   <REPOSITORY_TYPE>abapGit</REPOSITORY_TYPE>
+   <GIT_URL>https://github.com/atudor2/abap-pwnedpasswords.git</GIT_URL>
+  </DATA>
+ </asx:values>
+</asx:abap>
