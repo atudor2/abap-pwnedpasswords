@@ -15,7 +15,7 @@ CLASS zcl_pwned_passwords_manifest IMPLEMENTATION.
     me->zif_apack_manifest~descriptor = value #(
         group_id    = 'github.com/atudor2'
         artifact_id = 'abap-pwnedpasswords'
-        version     = '0.2'
+        version     = '0.3'
         git_url     = 'https://github.com/atudor2/abap-pwnedpasswords.git'
     ).
   ENDMETHOD.

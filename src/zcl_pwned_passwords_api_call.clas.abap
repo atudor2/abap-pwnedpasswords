@@ -52,6 +52,11 @@ CLASS zcl_pwned_passwords_api_call IMPLEMENTATION.
           textid = zcx_pwned_passwords=>internal_error.
     ENDIF.
 
+    IF i_use_padding = abap_true.
+      client->request->set_header_field( name  = 'Add-Padding'
+                                         value = 'true' ).
+    ENDIF.
+
     cl_http_utility=>set_request_uri( request = client->request
                                       uri     = |/range/{ i_hash_prefix }| ).
 
@@ -72,9 +77,11 @@ CLASS zcl_pwned_passwords_api_call IMPLEMENTATION.
           additional_message = http_response_text.
     ENDIF.
 
-    SPLIT http_response_text AT |\r\n| INTO TABLE DATA(hash_list).
+    " The response annoyingly may be split by \r\n or just \n
+    " Cheat by just splitting on \n
+    SPLIT http_response_text AT |\n| INTO TABLE DATA(hash_list).
 
-    INSERT LINES OF hash_list INTO TABLE et_password_hashes.
+    et_password_hashes = VALUE #( FOR <wa> IN hash_list ( condense( val = <wa> del = |\r| ) ) ).
   ENDMETHOD.
 
   METHOD rethrow_http_client_error.

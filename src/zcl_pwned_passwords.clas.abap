@@ -32,6 +32,8 @@ ENDCLASS.
 
 
 CLASS zcl_pwned_passwords IMPLEMENTATION.
+
+
   METHOD constructor.
     IF ir_api_call IS NOT BOUND.
       RAISE EXCEPTION TYPE cx_parameter_invalid
@@ -41,6 +43,7 @@ CLASS zcl_pwned_passwords IMPLEMENTATION.
 
     me->api_wrapper = ir_api_call.
   ENDMETHOD.
+
 
   METHOD hash_password.
     DATA raw_password TYPE xstring.
@@ -71,7 +74,8 @@ CLASS zcl_pwned_passwords IMPLEMENTATION.
 
 
   METHOD zif_pwned_passwords~is_password_pwned.
-    r_result = me->zif_pwned_passwords~get_password_status( i_password = i_password )-result.
+    r_result = me->zif_pwned_passwords~get_password_status( i_password    = i_password
+                                                            i_use_padding = i_use_padding )-result.
   ENDMETHOD.
 
 
@@ -88,10 +92,13 @@ CLASS zcl_pwned_passwords IMPLEMENTATION.
     me->api_wrapper->query_pwned_passwords_api(
       EXPORTING
         i_hash_prefix       = hash_prefix
+        i_use_padding       = i_use_padding
       IMPORTING
         et_password_hashes  = DATA(hashes) ).
 
     " Find the matching hash line -> : splits hash and password count
+    " This will correctly handle returned hashes with padding on as the prefix will not match
+    " Worst case a match is hit and then the result is skipped due to the 0 check
     LOOP AT hashes ASSIGNING FIELD-SYMBOL(<hash>).
       CHECK strlen( <hash> ) >= 35.
       DATA(full_hash) = hash_prefix && <hash>(35). " SHA1 -> 40 chars
@@ -105,10 +112,16 @@ CLASS zcl_pwned_passwords IMPLEMENTATION.
             textid = zcx_pwned_passwords=>malformed_api_response.
       ENDIF.
 
-      r_result = VALUE #( result = abap_true count = hash_split[ 2 ] ).
+      DATA(pwned_count) = CONV i( hash_split[ 2 ] ).
+      IF pwned_count = 0.
+        CONTINUE.
+      ENDIF.
+
+      r_result = VALUE #( result = abap_true count = pwned_count ).
       RETURN.
     ENDLOOP.
   ENDMETHOD.
+
 
   METHOD create.
     r_result = NEW zcl_pwned_passwords( NEW zcl_pwned_passwords_api_call( ) ).
