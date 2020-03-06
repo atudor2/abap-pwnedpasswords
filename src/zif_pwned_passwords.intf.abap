@@ -12,11 +12,13 @@ INTERFACE zif_pwned_passwords
 
   "! <p class="shorttext synchronized" lang="en">Is the given password pwned?</p>
   "! @parameter i_password | <p class="shorttext synchronized" lang="en">Password to check</p>
+  "! @parameter i_use_padding | <p class="shorttext synchronized" lang="en">Should the padding header be applied? (default false)</p>
   "! @parameter r_result | <p class="shorttext synchronized" lang="en">ABAP_TRUE if the password has been pwned</p>
   "! @raising zcx_pwned_passwords | <p class="shorttext synchronized" lang="en"></p>
   METHODS is_password_pwned
     IMPORTING
       i_password      TYPE csequence
+      i_use_padding   TYPE abap_bool DEFAULT abap_false
     RETURNING
       VALUE(r_result) TYPE abap_bool
     RAISING
@@ -24,11 +26,13 @@ INTERFACE zif_pwned_passwords
 
   "! <p class="shorttext synchronized" lang="en">Checks the password pwned status</p>
   "! @parameter i_password | <p class="shorttext synchronized" lang="en">Password to check</p>
+  "! @parameter i_use_padding | <p class="shorttext synchronized" lang="en">Should the padding header be applied? (default false)</p>
   "! @parameter r_result | <p class="shorttext synchronized" lang="en">Pwned Password result struct</p>
   "! @raising zcx_pwned_passwords | <p class="shorttext synchronized" lang="en"></p>
   METHODS get_password_status
     IMPORTING
       i_password      TYPE csequence
+      i_use_padding   TYPE abap_bool DEFAULT abap_false
     RETURNING
       VALUE(r_result) TYPE t_pwned_password_result
     RAISING
